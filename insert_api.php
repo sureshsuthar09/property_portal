@@ -1,13 +1,10 @@
 <?php
-// print_r($_POST);
 include("db/database.php");
 include("config/constant.php");
-// echo $_SERVER['REQUEST_METHOD'];
-// print_r(getallheaders()); exit;
 
 $filename = '';
 $error = [];
-// $data_property = '';
+
 if(isset($_FILES['image'])){
   $data['image'] =  fileUpload($_FILES['image']);
 }else{
