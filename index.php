@@ -113,6 +113,7 @@ $result = $data->get_properties($page,$filtersData);
 		<div class="row mt-4">
 			<div class="col-md-4">
 				<?php
+				// echo $result['left_rec'];
 					// $url = substr($url;
 					if(isset($_GET['page'])){
 						$url = substr($url, 0, strpos($url, "page") - 1);
@@ -131,13 +132,13 @@ $result = $data->get_properties($page,$filtersData);
 
 				if( $page > 1 && ($result['left_rec'] > 0) ) {
 						$last = $page - 2;
-						echo "<a href = \"$url$last\" class='btn btn-sm btn-primary'>Previous 10 Records</a> | ";
-						echo "<a href = \"$url$page\" class='btn btn-sm btn-primary'>Next 10 Records</a>";
+						echo "<a href = \"$url$last\" class='btn btn-sm btn-primary'>Previous 4 Records</a> | ";
+						echo "<a href = \"$url$page\" class='btn btn-sm btn-primary'>Next 4 Records</a>";
 				  }else if( $page == 1 ) {
-						echo "<a href = \"$url$page\" class='btn btn-sm btn-primary'>Next 10 Records</a>";
+						echo "<a href = \"$url$page\" class='btn btn-sm btn-primary'>Next 4 Records</a>";
 					}else if( $result['left_rec'] <= 0 ) {
 						$last = $page - 2;
-						echo "<a href = \"$url$last\" class='btn btn-sm btn-primary'>Previous 10 Records</a>";
+						echo "<a href = \"$url$last\" class='btn btn-sm btn-primary'>Previous 4 Records</a>";
 					}
 				?>
 			</div>
