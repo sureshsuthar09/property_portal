@@ -37,7 +37,7 @@ $result = $data->get_properties($page,$filtersData);
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>MTC Property Portal</title>
+	<title>Property Portal</title>
 	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
