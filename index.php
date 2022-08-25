@@ -44,7 +44,7 @@ $result = $data->get_properties($page,$filtersData);
 <body>
 	<nav class="navbar navbar-light bg-light">
   <div class="container-fluid">
-    <span class="navbar-brand mb-0 h1">MTC Property</span>
+    <span class="navbar-brand mb-0 h1">Property search Portal</span>
   </div>
 </nav>
 	<div class="container mt-3">

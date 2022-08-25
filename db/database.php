@@ -4,10 +4,10 @@
 
 class DatabaseClass  
 {
-    private $host = "localhost";
-    private $username = "root";
-    private $password = ""; 
-    private $db = "mtc";
+    private $host = host;
+    private $username = username;
+    private $password = password; 
+    private $db = db;
     
     // Define mysql database connection    
     public function __construct()  
