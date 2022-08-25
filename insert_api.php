@@ -1,6 +1,7 @@
 <?php
 // print_r($_POST);
 include("db/database.php");
+include("config/constant.php");
 // echo $_SERVER['REQUEST_METHOD'];
 // print_r(getallheaders()); exit;
 
@@ -114,7 +115,8 @@ if(count($error)==0){
    $data['property_type_id '] = $last_id;
    $result = $object->insert('property',$data);
    if($result){
-      echo 'Data insered successfully';
+      echo json_encode(['message'=>'Data insered successfully']);
+      // echo 'Data insered successfully';
    }else{
       echo 'Data not insered property';
    }

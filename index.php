@@ -94,18 +94,18 @@ $result = $data->get_properties($page,$filtersData);
 					 			 <img src="<?php echo $value['image'] ?>" style="object-fit: cover; width: 100%;" class="card-img-top" alt="...">
 							</div>
 							<div class="col-md-6 col-sm-6 col-lg-6 pt-3 col-xs-6">
-								  	<span class="badge bg-secondary" style="float: right;"><?php echo ucfirst($value['type']); ?></span>
-								    <h5 class="card-title"><?php echo substr($value['property_type'], 0, 30); ?></h5>
-								    <!-- <p class="card-text"><?php echo substr($value['property_description'], 0, 170) . '...'; ?></p> -->
-								    <ul class="list-group">
-								    	<li class="list-group-item"><label>Number of Bedrooms : </label><b><?php echo $value['number_of_bedrooms']?></b></li>
-								    	<li class="list-group-item"><label>Number of Bathrooms : </label><b><?php echo $value['number_of_bathrooms']?></b></li>
-								    </ul>
-								  <div class="mt-4">
-								  	<label>Price : <b><?php echo number_format($value['price'],2); ?></b></label>
-								  </div>
+							  	<span class="badge bg-secondary" style="float: right;"><?php echo ucfirst($value['type']); ?></span>
+							    <h5 class="card-title"><?php echo substr($value['property_type'], 0, 30); ?></h5>
+							    <!-- <p class="card-text"><?php echo substr($value['property_description'], 0, 170) . '...'; ?></p> -->
+							    <ul class="list-group">
+							    	<li class="list-group-item"><label>Number of Bedrooms : </label><b><?php echo $value['number_of_bedrooms']?></b></li>
+							    	<li class="list-group-item"><label>Number of Bathrooms : </label><b><?php echo $value['number_of_bathrooms']?></b></li>
+							    </ul>
+							  <div class="mt-4">
+							  	<label>Price : <b><?php echo number_format($value['price'],2); ?></b></label>
+							  </div>
 							</div>
-						</div>	
+						</div>
 					</div>
 				</div>
 			<?php } ?>
