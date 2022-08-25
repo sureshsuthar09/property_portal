@@ -104,28 +104,19 @@ if(isset($_POST['type']) && in_array($_POST['type'],['rent','sale']) ){
 }
 
 if(count($error)==0){
-   // echo "<pre>"; 
-   // print_r($data_property);
-   // echo "</pre>";
-   // exit;
-
    // For Database connction
    $object = new DatabaseClass;
    $last_id = $object->insert('property_type',$data_property);
    $data['property_type_id '] = $last_id;
    $result = $object->insert('property',$data);
    if($result){
-      echo json_encode(['message'=>'Data insered successfully']);
-      // echo 'Data insered successfully';
+      echo json_encode(['message'=>'Data insered successfully','success'=>true]);
    }else{
-      echo 'Data not insered property';
+      echo json_encode(['message'=>'Data not insered property','success'=>false]);
    }
 
 }else{
-   echo "<pre>"; 
-   print_r($error);
-   echo "</pre>";
-   exit;
+   echo json_encode(['error'=>true,'success'=>false]);
 }
 
 function fileUpload($filedata){
