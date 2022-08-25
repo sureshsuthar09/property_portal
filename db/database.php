@@ -37,7 +37,7 @@ class DatabaseClass
         return mysqli_query($this->con, $sql);
     }
 
-     public function get_total_properties()
+    public function get_total_properties()
     {
         $sql = "SELECT count(id) as count_property FROM property";  
         $results = $this->query_executed($sql);
@@ -48,24 +48,20 @@ class DatabaseClass
     // This method fetch rows execute query
     public function get_properties($page,$filtersData=null)
     {
-        // print_r($filtersData); exit;
+
         $rec_count = $this->get_total_properties();
-        // print_r($rec_count[0]['count_property']); exit;
         
         $rec_limit = 4;
 
         if(isset($page ) ) {
             $page_data = $page + 1;
-            //$offset = $rec_limit * $page;
-
             $offset = ($page - 1)  * $rec_limit;
         }else {
 
             $page_data = 0;
             $offset = 0;
         }
-        // print_r($offset); exit;
-        // $rec_count = $rows; exit;
+
         $rec_count =  isset($rec_count[0]['count_property']) ? $rec_count[0]['count_property'] : 0;
 
         $left_rec = $rec_count - ($page * $rec_limit);
@@ -85,14 +81,12 @@ class DatabaseClass
             $whereCondition[] = 'property.type='."'".$filtersData['type']."'";
         }
 
-        // print_r(implode(' AND ',$whereCondition)); exit;
         if(empty($whereCondition)){
             $whereCondition = '';
         }else{
             $whereCondition = 'WHERE '.implode(' AND ',$whereCondition);
         }
 
-        // print_r($offset); exit;
         $sql = "SELECT property_type.property_type as property_type, property_type.property_description as property_description ,property.id, property.property_type_id, property.country, property.town, property.description, property.address, property.image, property.thumbnail, property.latitude, property.longitude, property.number_of_bedrooms, property.number_of_bathrooms, property.price, property.type FROM property LEFT JOIN property_type ON property.property_type_id =property_type.id $whereCondition LIMIT $offset, $rec_limit";
 
         // exit;

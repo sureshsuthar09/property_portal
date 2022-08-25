@@ -113,11 +113,8 @@ $result = $data->get_properties($page,$filtersData);
 		<div class="row mt-4">
 			<div class="col-md-4">
 				<?php
-				// echo $result['left_rec'];
-					// $url = substr($url;
 					if(isset($_GET['page'])){
 						$url = substr($url, 0, strpos($url, "page") - 1);
-
 					}
 
 					if(isset($_GET['search_filter'])){
