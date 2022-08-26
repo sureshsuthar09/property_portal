@@ -1,6 +1,6 @@
 # property_test
 
-1. Database credentials and api key are stored in config/constant.php
+1. Database credentials are stored in config/constant.php
 2. Database connection and query are written in db/database.php
 2. Insert data API stored in root directory 
 
