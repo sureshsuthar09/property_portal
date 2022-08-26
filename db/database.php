@@ -1,129 +1,86 @@
 <?php
-// include("config/constant.php");
-
-
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 class DatabaseClass  
 {
-    private $host = host;
-    private $username = username;
-    private $password = password; 
-    private $db = db;
-    
-    // Define mysql database connection    
-    public function __construct()  
-    {  
-        $this->con = mysqli_connect($this->host, $this->username, $this->password, $this->db) or die(mysql_error("database"));  
-        if(!$this->con)  
-        {  
-            echo 'Database Connection Error ' . mysqli_connect_error($this->con);
-        }
-        $this->middleware();
-    }
+	private $dbHost=host;  
+	private $dbName=db;  
+	private $dbUser=username;
+	private $dbPassword=password;
 
-    protected function middleware(){
-        $header = getallheaders();
-        if($_SERVER['REQUEST_METHOD']=='POST'){
-            if(!isset($header['api_key'])){
-                echo 'api_key is missing in header'; exit;
-            }else if(isset($header['api_key']) && $header['api_key']!=api_key){
-                echo 'Please provide a  valid api_key'; exit;
-            }
-        }
-    }
+   // Define database connection    
+   public function __construct(){  
+		try {
+			$this->dbConn= new PDO("mysql:host=$this->dbHost;dbname=$this->dbName",$this->dbUser,$this->dbPassword);
+		}catch(PDOException $e){
+			echo "Connection failed: " . $e->getMessage(); exit;
+		}
+   }
 
-    // This method used to execute mysql query 
-    protected  function query_executed($sql)  
-    {  
-        return mysqli_query($this->con, $sql);
-    }
+   public function insert_data($data){
 
-    public function get_total_properties()
-    {
-        $sql = "SELECT count(id) as count_property FROM property";  
-        $results = $this->query_executed($sql);
-        $rows = $this->get_fetch_data($results);  
-        return $rows;
-    }
+    	$insertQry1 = 'insert into property_type (id, property_title, property_description) values(:id,:property_title,:property_description)';
+		$insertStatement1 = $this->dbConn->prepare($insertQry1);
+		$insertStatement1->execute($data['property_type']);
+		 
 
-    // This method fetch rows execute query
-    public function get_properties($page,$filtersData=null)
-    {
+    	$insertQry2 = 'insert into property (property_type_id,county,country, town, description, address,image,thumbnail,latitude,longitude,number_of_bedrooms,number_of_bathrooms,price,type) values(:property_type_id,:county,:country,:town,:description,:address,:image,:thumbnail,:latitude,:longitude,:number_of_bedrooms,:number_of_bathrooms,:price,:type)';
+		$insertStatement2 = $this->dbConn->prepare($insertQry2);
 
-        $rec_count = $this->get_total_properties();
-        
-        $rec_limit = 4;
+		if($insertStatement2->execute($data['property'])){
+		   return true;
+		}else{
+		   return false;
+		}
+   }
 
-        if(isset($page ) ) {
-            $page_data = $page + 1;
-            $offset = ($page - 1)  * $rec_limit;
-        }else {
+   public function get_properties($page=null, $filtersData){
+   	$query = "select count(id) as count from property";
+   	$getStatement1 = $this->dbConn->prepare($query);
+		$getStatement1->execute();
+		$getResult1 = $getStatement1->fetchAll(\PDO::FETCH_ASSOC);
 
-            $page_data = 0;
-            $offset = 0;
-        }
+		$rec_limit = 10;
 
-        $rec_count =  isset($rec_count[0]['count_property']) ? $rec_count[0]['count_property'] : 0;
+		if(isset($page ) ) {
+			$page_data = $page + 1;
+			$offset = ($page - 1)  * $rec_limit;
+		}else {
+			$page_data = 0;
+			$offset = 0;
+		}
 
-        $left_rec = $rec_count - ($page * $rec_limit);
+		$rec_count =  isset($getResult1[0]['count']) ? $getResult1[0]['count'] : 0;
 
-        $whereCondition = [];
-        // Filter Data
-        if(isset($filtersData['town']) && !empty($filtersData['town'])){
-           $whereCondition[] = 'property.town='."'".$filtersData['town']."'";
-        }
-        if(isset($filtersData['number_of_bedrooms']) && !empty($filtersData['number_of_bedrooms'])){
-            $whereCondition[] = 'property.number_of_bedrooms='."'".$filtersData['number_of_bedrooms']."'";
-        }
-        if(isset($filtersData['price']) && !empty($filtersData['price'])){
-           $whereCondition[] = 'property.price<='."'".$filtersData['price']."'";
-        }
-        if(isset($filtersData['type']) && !empty($filtersData['type'])){
-            $whereCondition[] = 'property.type='."'".$filtersData['type']."'";
-        }
+		$left_rec = $rec_count - ($page * $rec_limit);
+   	$whereCondition = [];
 
-        if(empty($whereCondition)){
-            $whereCondition = '';
-        }else{
-            $whereCondition = 'WHERE '.implode(' AND ',$whereCondition);
-        }
+   	if(isset($filtersData['town']) && !empty($filtersData['town'])){
+		  	$whereCondition[] = 'property.town='."'".$filtersData['town']."'";
+		}
+		if(isset($filtersData['number_of_bedrooms']) && !empty($filtersData['number_of_bedrooms'])){
+		   $whereCondition[] = 'property.number_of_bedrooms='."'".$filtersData['number_of_bedrooms']."'";
+		}
+		if(isset($filtersData['price']) && !empty($filtersData['price'])){
+		  	$whereCondition[] = 'property.price<='."'".$filtersData['price']."'";
+		}
+		if(isset($filtersData['type']) && !empty($filtersData['type'])){
+		   $whereCondition[] = 'property.type='."'".$filtersData['type']."'";
+		}
 
-        $sql = "SELECT property_type.property_type as property_type, property_type.property_description as property_description ,property.id, property.property_type_id, property.country, property.town, property.description, property.address, property.image, property.thumbnail, property.latitude, property.longitude, property.number_of_bedrooms, property.number_of_bathrooms, property.price, property.type FROM property LEFT JOIN property_type ON property.property_type_id =property_type.id $whereCondition LIMIT $offset, $rec_limit";
+		if(empty($whereCondition)){
+		   $whereCondition = '';
+		}else{
+		   $whereCondition = 'WHERE '.implode(' AND ',$whereCondition);
+		}
 
-        // exit;
-        $results = $this->query_executed($sql);
-        $rowsData = $this->get_fetch_data($results);
-        $rows = ['data'=>$rowsData,'left_rec'=>$left_rec];
-        return $rows;
-    }
+		
+	 	$insertQry = "select property_type.property_title as property_title, property_type.property_description as property_description ,property.id, property.property_type_id, property.country, property.town, property.description, property.address, property.image, property.thumbnail, property.latitude, property.longitude, property.number_of_bedrooms, property.number_of_bathrooms, property.price, property.type FROM property LEFT JOIN property_type ON property.property_type_id =property_type.id $whereCondition LIMIT $offset, $rec_limit";
 
-    protected function get_fetch_data($r)  
-    {
-        $array = array();  
-        while ($rows = mysqli_fetch_assoc($r))  
-        {  
-            $array[] = $rows;  
-        }  
-        return $array;  
-    }
+   		$getStatement = $this->dbConn->prepare($insertQry);
+		$getStatement->execute();
+		$getResult = $getStatement->fetchAll(\PDO::FETCH_ASSOC);
 
-    // Insert data into database
-    public function insert($table_name, $data)
-    {
-        
-
-        $string = "INSERT INTO ".$table_name." (";            
-        $string .= implode(",", array_keys($data)) . ') VALUES (';            
-        $string .= "'" . implode("','", array_values($data)) . "')";  
-        if(mysqli_query($this->con,$string))
-        {  
-            return mysqli_insert_id($this->con);
-            // return true;  
-        }
-        else
-        {  
-            return false;
-        }  
-    }  
-}  
-
-?>
+		return ['data'=>$getResult,'left_rec'=>$left_rec,'total_rec'=>$rec_count];
+   }
+}

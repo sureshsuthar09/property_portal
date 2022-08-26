@@ -1,13 +1,15 @@
-# property_portal
+# property_test
 
-1. First need to set api_key get parameter in base URL 
-2. All Credentials are save in config/constant.php file(api key and db creds)
-3. Database sql file is saved into root folder
-4. Insert API link is : 
-		Link : base_URL/insert_api.php
-		Type : POST
-		Parameter : country,town,description,address,image(file),thumbnail(file),latitude,longitude,number_of_bedrooms,number_of_bathrooms,price,type(sale,rent),property_type,property_description(All Parameter are required)
-		Header : set api_key and their value into header
-5. List all property listing data from root url
-6. Filter are given by(Town, Number Of Bedrooms)
-7. Pagination are given with limit is 4
+1. Database credentials and api key are stored in config/constant.php
+2. Database connection and query are written in db/database.php
+2. Insert data API stored in root directory 
+
+			API Name : insert_data.php?api_key=<API KEY VALUE>
+			Method : GET
+
+			When Execute from browser : BASE_URL/insert_data.php?api_key=<API KEY VALUE>
+			When Execute from cli in root directory : insert_data.php?api_key=<API KEY VALUE>	
+
+3. All Data Listing from root directory's file index.php
+4. Filter are given on listing page by(Town, Number Of Bedrooms, Price, Type)
+5. Pagination are given on listing page with limit is 10
